@@ -1,25 +1,65 @@
-import logo from './logo.svg';
 import './App.css';
+import {useRef, useState } from 'react';
+
+
 
 function App() {
+
+  const caption = useRef();
+  const [catImageUrl, setCatImageUrl] = useState('https://cataas.com/cat');
+
+  const generate = async() => {
+    const cap = caption.current.value;
+
+    const url ='https://cataas.com/cat?json=true';
+    const getCatUrl = '';
+    
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      console.log(url)
+
+      if (!cap) {
+        const getCatUrl = `https://cataas.com/cat/${data._id}`;
+        setCatImageUrl(getCatUrl);
+        return;
+      }else{
+        const getCatUrl = `https://cataas.com/cat/${data._id}/says/${cap}`;
+        setCatImageUrl(getCatUrl);
+        
+      }
+      console.log(getCatUrl);
+
+    } catch (error) {
+      console.log(error);
+  }
+}
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Verkefni 10 - Random cat with caption</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Ýttu á Takka til þess að fá kattarmynd af handahófi. Ef þú vilt bæta við texta á mynd, skrifaðu textan í boxið, og ýttu svo á takkan. 
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="cat-container">
+          <div className='img-container'>
+            <img src={catImageUrl} alt="your cat" />
+          </div>
+          
+          <div className='generator-container'>
+            <input type="text" placeholder="Texti hér:" ref={caption} />
+            <button onClick={generate}>Generate</button>
+          </div>
+        </div>
       </header>
     </div>
   );
 }
 
+
 export default App;
+
+
