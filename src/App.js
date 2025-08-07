@@ -32,7 +32,26 @@ function App() {
     } catch (error) {
       console.log(error);
   }
-}
+  }
+
+  const downloadImage = async () => {
+    try {
+      const response = await fetch(catImageUrl, { mode: 'cors' });
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cat.jpg';
+      a.click();
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed", error);
+    }
+  };
+
+
 
   return (
       <>
@@ -48,6 +67,7 @@ function App() {
           <div className='generator-container'>
             <input type="text" placeholder="Texti hér:" ref={caption} />
             <button onClick={generate}>Generate</button>
+            {catImageUrl && ( <button onClick={downloadImage}>Download</button> )}
           </div>
         </div>
       </>
